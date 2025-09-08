@@ -1,7 +1,7 @@
 {
-    "manufacturer": "AGLIO",
     "keyboard_name": "BARAM-GH60-313SPLITSPC",
     "maintainer": "AGLIO",
+    "manufacturer": "AGLIO",
     "processor": "RP2040",
     "bootloader": "rp2040",
     "usb": {
