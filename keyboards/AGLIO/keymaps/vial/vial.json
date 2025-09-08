@@ -1,10 +1,10 @@
 {
   "name": "BARAM-GH60-313SPLIT",
-  "lighting": "qmk_rgblight",
   "matrix": {
     "rows": 5,
     "cols": 15
   },
+  "lighting": "qmk_rgblight",
   "layouts": {
     "labels": [
       "Stepped CPS",
