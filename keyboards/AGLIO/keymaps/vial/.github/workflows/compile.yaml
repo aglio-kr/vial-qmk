@@ -1,0 +1,25 @@
+name: Compile Vial Firmware
+on:
+  push:
+    branches: [vial]
+  pull_request:
+    branches: [vial]
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install QMK
+        run: pip install qmk
+      - name: Compile Firmware
+        run: qmk compile -kb BARAM-GH60S-313split -km vial --env UF2
+      - name: Upload Firmware
+        uses: actions/upload-artifact@v3
+        with:
+          name: firmware
+          path: "*.uf2"
