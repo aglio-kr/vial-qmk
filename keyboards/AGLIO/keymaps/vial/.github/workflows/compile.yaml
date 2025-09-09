@@ -4,22 +4,19 @@ on:
     branches: [vial]
   pull_request:
     branches: [vial]
+  workflow_dispatch:
 jobs:
   compile:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-      - name: Install QMK
+      - name: Install QMK CLI
         run: pip install qmk
-      - name: Compile Firmware
-        run: qmk compile -kb BARAM-GH60S-313split -km vial --env UF2
-      - name: Upload Firmware
+      - name: Compile AGLO Default (UF2)
+        run: qmk compile -kb /keyboards/aglio -km default -e UF2
+      - name: Upload UF2 Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: firmware
-          path: "*.uf2"
+          name: aglio-uf2
+          path: aglio.uf2
