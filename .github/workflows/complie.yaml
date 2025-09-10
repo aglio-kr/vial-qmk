@@ -1,5 +1,5 @@
 name: CI
-on: [ pull_request, push, workflow_dispatch ]
+on: [pull_request, push, workflow_dispatch]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -25,46 +25,8 @@ jobs:
     - name: Verify Vial UID is unique per-keyboard
       run: python3 util/ci_vial_verify_uid.py
 
-  build-default:
-    name: Build default keymaps for Vial
-    runs-on: ubuntu-latest
-    container: ghcr.io/qmk/qmk_cli@sha256:16c4916e95b99bf88d27b15aec8db409ee17265d1710287fde248c6666508966
-    env:
-      KEYMAP: default
-
-    steps:
-    - name: (actions) Checkout Vial repo
-      uses: actions/checkout@v4
-      with:
-        persist-credentials: false
-        submodules: recursive
-
-    - name: Build
-      id: build
-      run: |
-        git config --global --add safe.directory $(pwd)
-        if ! qmk mass-compile -j $(nproc) $(qmk find -km vial | sed "s/:vial$/:${KEYMAP}/");
-          then
-          echo "::error::$(ls -1 .build/failed.log.* | wc -l) keymaps failed to build. See logs and/or job summary for details."
-          exit 1
-        fi
-
-    - name: Dump failure logs
-      if: ${{ failure() && steps.build.conclusion == 'failure' }}
-      run: |
-        echo '### Failure logs' | tee -a "${GITHUB_STEP_SUMMARY}"
-
-        cd .build || exit 1
-        for log in failed.log.*; do
-          pretty_logname="$(echo "${log}" | sed "s/^failed\.log\.[0-9]\+\.// ; s/\.${KEYMAP}$//")"
-
-          printf '\n::group::%s\n%s\n::endgroup::\n' "${pretty_logname}" "$(sed "${REGEX_MAKE_OUTPUT}" < "${log}")"
-          printf '\n<details>\n<summary>%s</summary>\n\n```\n%s\n```\n\n</details>\n' \
-             "${pretty_logname}" "$(sed "${REGEX_MAKE_OUTPUT} ; ${REGEX_ANSI_COLOR}" < "${log}")" >> "${GITHUB_STEP_SUMMARY}"
-        done
-
-  build-vial:
-    name: Build Vial keymaps
+  build-aglio-vial:
+    name: Build aglio Vial keymap
     runs-on: ubuntu-latest
     container: ghcr.io/qmk/qmk_cli@sha256:16c4916e95b99bf88d27b15aec8db409ee17265d1710287fde248c6666508966
     env:
@@ -77,13 +39,13 @@ jobs:
         persist-credentials: false
         submodules: recursive
 
-    - name: Build
+    - name: Build aglio Vial (UF2)
       id: build
       run: |
         git config --global --add safe.directory $(pwd)
-        if ! qmk mass-compile -km "${KEYMAP}" -j $(nproc);
+        if ! qmk compile -kb aglio -km ${KEYMAP} -e UF2;
           then
-          echo "::error::$(ls -1 .build/failed.log.* | wc -l) keymaps failed to build. See logs and/or job summary for details."
+          echo "::error::aglio vial keymap failed to build. See logs and/or job summary for details."
           exit 1
         fi
 
@@ -100,3 +62,9 @@ jobs:
           printf '\n<details>\n<summary>%s</summary>\n\n```\n%s\n```\n\n</details>\n' \
             "${pretty_logname}" "$(sed "${REGEX_MAKE_OUTPUT} ; ${REGEX_ANSI_COLOR}" < "${log}")" >> "${GITHUB_STEP_SUMMARY}"
         done
+
+    - name: Upload aglio UF2 Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: aglio-uf2
+        path: aglio_vial.uf2
