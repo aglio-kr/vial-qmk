@@ -14,9 +14,9 @@ jobs:
       - name: Install QMK CLI
         run: pip install qmk
       - name: Compile AGLO Default (UF2)
-        run: qmk compile -kb keyboards/aglio -km vial -e UF2
+        run: qmk compile -kb aglio -km vial -e UF2
       - name: Upload UF2 Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: aglio-uf2
-          path: aglio_default.uf2
+          path: aglio_default.uf2 
