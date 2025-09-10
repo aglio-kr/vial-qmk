@@ -1,4 +1,4 @@
-name: Compile AGLIO Firmware
+name: Compile aglio Firmware
 on:
   push:
     branches: [vial]
@@ -14,9 +14,9 @@ jobs:
       - name: Install QMK CLI
         run: pip install qmk
       - name: Compile AGLIO VIAL (UF2)
-        run: qmk compile -kb AGLIO -km vial -e UF2
+        run: qmk compile -kb aglio -km vial -e UF2
       - name: Upload UF2 Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: AGLIO-uf2
-          path: AGLIO_vial.uf2 
+          name: aglio-uf2
+          path: aglio_vial.uf2 
