@@ -4,7 +4,7 @@ on:
     branches: [vial]
   pull_request:
     branches: [vial]
-  workflow_dispatch:
+  workflow_dispatch:  # 수동 실행 가능
 jobs:
   compile:
     runs-on: ubuntu-latest
@@ -15,15 +15,11 @@ jobs:
       - name: Install QMK CLI
         run: pip install qmk
       - name: Install ARM GCC Toolchain
-        uses: maxim-lobanov/setup-arm-none-eabi-gcc@v1 
+        uses: xpack/setup-arm-none-eabi-gcc@v2  # 대체 액션 사용
         with:
-          version: '10-2020-q4'  # 최신 버전 사용 (RP2040 호환)
-      - name: Install Chibios Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi
-      - name: Compile AGLO VIAL (UF2)
-        run: qmk compile -kb aglio -km vial -e UF2
+          version: '12.2.rel1'  # RP2040 호환 최신 버전
+      - name: Compile aglio VIAL (UF2)
+        run: qmk compile -kb aglo -km vial -e UF2
       - name: Upload Firmware Artifact
         uses: actions/upload-artifact@v4
         with:
