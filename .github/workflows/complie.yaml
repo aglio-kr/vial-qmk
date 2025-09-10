@@ -17,7 +17,10 @@ jobs:
       - name: Install ARM GCC Toolchain
         uses: carlosperate/arm-none-eabi-gcc-action@v1
         with:
-          release: '13.3.Rel1'  # RP2040에 적합한 안정적인 버전
+          release: '13.3.Rel1'  # RP2040 호환
+      - name: Setup QMK Dependencies (Chibios)
+        run: |
+          qmk setup  # QMK 의존성 설치 (Chibios 포함)
       - name: Compile aglio VIAL (UF2)
         run: qmk compile -kb aglio -km vial -e UF2
       - name: Upload Firmware Artifact
