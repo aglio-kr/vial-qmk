@@ -1,4 +1,4 @@
-name: Compile AGLO Firmware
+name: Compile AGLIO Firmware
 on:
   push:
     branches: [vial]
@@ -13,10 +13,10 @@ jobs:
         uses: actions/checkout@v3
       - name: Install QMK CLI
         run: pip install qmk
-      - name: Compile AGLO Default (UF2)
-        run: qmk compile -kb aglio -km vial -e UF2
+      - name: Compile AGLIO VIAL (UF2)
+        run: qmk compile -kb BARAM-GH60-313SPLITSPC -km vial -e UF2
       - name: Upload UF2 Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: aglio-uf2
-          path: aglio_default.uf2 
+          name: BARAM-GH60-313SPLITSPC-uf2
+          path: BARAM-GH60-313SPLITSPC_vial.uf2 
