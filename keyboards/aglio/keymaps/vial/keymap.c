@@ -38,6 +38,11 @@ bool led_update_user(led_t led_state) {
   return true;
 }
 
-const uint16_t PROGMEM key_combos[0] = {};
-const td_data_t tap_dance_actions[] = {};
-const key_override_t key_overrides[] = {};
+const uint16_t PROGMEM key_combos[0] = {
+};
+
+const qk_tap_dance_action_t tap_dance_actions[] = {
+};
+
+const key_override_t key_overrides[] = {
+};
