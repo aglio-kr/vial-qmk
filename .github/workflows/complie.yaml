@@ -8,15 +8,24 @@ on:
 jobs:
   compile:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install QMK CLI
         run: pip install qmk
-      - name: Compile AGLIO VIAL (UF2)
+      - name: Install ARM GCC Toolchain
+        uses: maxim-lobanov/setup-arm-none-eabi-gcc@v1 
+        with:
+          version: '10-2020-q4'  # 최신 버전 사용 (RP2040 호환)
+      - name: Install Chibios Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi
+      - name: Compile AGLO VIAL (UF2)
         run: qmk compile -kb aglio -km vial -e UF2
-      - name: Upload UF2 Artifact
+      - name: Upload Firmware Artifact
         uses: actions/upload-artifact@v4
         with:
           name: aglio-uf2
-          path: aglio_vial.uf2 
+          path: aglio_vial.uf2
