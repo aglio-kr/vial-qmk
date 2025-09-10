@@ -35,9 +35,6 @@ jobs:
       with:
         persist-credentials: false
         submodules: recursive
-    - name: Setup Chibios
-      run: |
-        git clone --depth 1 https://github.com/qmk/Chibios.git lib/chibios
     - name: Build aglio Vial (UF2)
       id: build
       run: |
