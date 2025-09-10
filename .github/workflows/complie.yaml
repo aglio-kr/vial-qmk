@@ -15,11 +15,11 @@ jobs:
       - name: Install QMK CLI
         run: pip install qmk
       - name: Install ARM GCC Toolchain
-        uses: xpack/setup-arm-none-eabi-gcc@v2  # 대체 액션 사용
+        uses: carlosperate/arm-none-eabi-gcc-action@v1
         with:
-          version: '12.2.rel1'  # RP2040 호환 최신 버전
+          release: '13.3.Rel1'  # RP2040에 적합한 안정적인 버전
       - name: Compile aglio VIAL (UF2)
-        run: qmk compile -kb aglo -km vial -e UF2
+        run: qmk compile -kb aglio -km vial -e UF2
       - name: Upload Firmware Artifact
         uses: actions/upload-artifact@v4
         with:
